@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "texturasmix",
+  "version": "${version}",
+  "name": "Texturas Mix",
+  "description": "Navegador de texturas por item: misture texturas de varios resource packs e do Modrinth.",
+  "authors": ["Elias"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": { "client": ["com.texturasmix.TexturasMix"] },
+  "depends": { "fabricloader": ">=0.18.0", "minecraft": "~26.1.2", "fabric-api": "*", "java": ">=25" }
+}

@@ -1,0 +1,27 @@
+plugins { id 'net.fabricmc.fabric-loom' version "${loom_version}" }
+version = project.mod_version
+group = project.maven_group
+base { archivesName = project.archives_base_name }
+
+// Código comum (sem API do Minecraft) vem do projeto 1.20.1.
+def raiz = file('../..')
+def comuns = ['Categoria', 'Config', 'Conversor', 'Indice', 'Gerador', 'Modrinth', 'Ui', 'TelaTexturas', 'Atualizador', 'Render3D']
+def copiarComum = tasks.register('copiarComum', Sync) {
+	from(new File(raiz, 'src/main/java')) { include comuns.collect { "com/texturasmix/${it}.java" } }
+	into layout.buildDirectory.dir('comum')
+}
+sourceSets.main.java.srcDir(copiarComum)
+sourceSets.main.resources.srcDir(new File(raiz, 'src/main/resources'))
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+processResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE // fabric.mod.json desta pasta vence
+	inputs.property "version", project.version
+	filesMatching("fabric.mod.json") { expand "version": project.version }
+}
+tasks.withType(JavaCompile).configureEach { it.options.release = 25; it.options.encoding = "UTF-8" }
+java { sourceCompatibility = JavaVersion.VERSION_25; targetCompatibility = JavaVersion.VERSION_25 }
